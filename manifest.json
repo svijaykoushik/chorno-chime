@@ -1,0 +1,13 @@
+{
+  "name": "Hourly Notification PWA",
+  "short_name": "Hourly Notification",
+  "start_url": ".",
+  "display": "standalone",
+  "icons": [
+    {
+      "src": "icon.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
+}
