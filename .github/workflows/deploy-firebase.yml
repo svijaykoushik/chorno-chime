@@ -16,11 +16,10 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '14'
+          node-version: '16' # Update this to a compatible Node.js version
 
-      - name: Install Firebase CLI
-        run: npm install -g firebase-tools
+      - name: Install project dependencies
+        run: npm ci
 
       - name: Deploy to Firebase Hosting
-        run: |
-          firebase deploy --only hosting --token ${{ secrets.FIREBASE_TOKEN }}
+        run: npx firebase deploy --only hosting --token ${{ secrets.FIREBASE_TOKEN }}
