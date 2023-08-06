@@ -97,8 +97,8 @@ function askNotificationPermission() {
 // Function to show the notification and play the sound
 function showNotification() {
     const options = {
-        body: 'This is an hourly notification!',
-        icon: 'icon.png', // Replace with the path to your notification icon (192x192 pixels)
+        body: 'This is an hourly notification from ChronoChime!',
+        icon: 'chrono-chime-icon-192.png', // Replace with the path to your notification icon (192x192 pixels)
         vibrate: [200, 100, 200], // Vibration pattern (optional)
         // Add other notification options here if needed
     };
