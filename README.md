@@ -1,5 +1,7 @@
 # ChronoChime
 
+![ChronoChime Logo](./chrono-chime-icon-192.png)
+
 Welcome to ChronoChime, an elegant Progressive Web App (PWA) that sends you hourly notifications along with a soothing chime. Stay on track and manage your time effortlessly with ChronoChime!
 
 ## Overview
@@ -15,10 +17,13 @@ To deploy ChronoChime, follow these steps:
    ```bash
    git clone https://github.com/svijaykoushik/chorno-chime.git
    ```
+
 2. Navigate to the project directory:
+
     ```bash
     cd chorno-chime
     ```
+
 3. Choose one of the following deployment methods:
 
    ## 3.1 Apache or IIS
@@ -39,9 +44,21 @@ To deploy ChronoChime, follow these steps:
     ```bash
     npx serve
     ```
+
+## Screenshots
+
+![Screenshot 1](./screenshot1.jpeg)
+![Screenshot 2](./screenshot2.jpeg)
+
 ## About
-ChronoChime was created as a fun and functional project to showcase the capabilities of PWAs. 
+
+ChronoChime was created as a fun and functional project to showcase the capabilities of PWAs.
 Stay productive and organized with the gentle reminder of ChronoChime's hourly notifications.
 
+## Contributing
+
+Contributions are welcome! If you find any issues or have ideas for improvements, feel free to submit a pull request.
+
 ## Acknowledgments
+
 Sound Effect by [UNIVERSFIELD](https://pixabay.com/users/universfield-28281460) from [Pixabay](https://pixabay.com/sound-effects)
