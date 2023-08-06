@@ -1,0 +1,23 @@
+{
+  "name": "chorno-chime",
+  "version": "1.0.0",
+  "description": "ChronoChime - Hourly Notification Progressive Web App (PWA) with background sounds and notifications.",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/svijaykoushik/chorno-chime.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/svijaykoushik/chorno-chime/issues"
+  },
+  "homepage": "https://github.com/svijaykoushik/chorno-chime#readme",
+  "devDependencies": {
+    "firebase-tools": "^12.4.7"
+  }
+}

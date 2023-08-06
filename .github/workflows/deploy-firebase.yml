@@ -1,0 +1,30 @@
+name: Deploy to Firebase Hosting
+
+on:
+  push:
+    branches:
+      - main  # Change this to your main branch
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build application
+        run: npm run build  # Modify this based on your build process
+
+      - name: Deploy to Firebase Hosting
+        run: |
+          npm install -g firebase-tools
+          firebase deploy --token ${{ secrets.FIREBASE_TOKEN }}
