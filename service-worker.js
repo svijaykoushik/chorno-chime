@@ -1,10 +1,10 @@
-const VERSION = 'v1.1.63';
+const VERSION = 'v1.1.64';
 const CACHE_NAME = 'chrono-chime-hourly-notification-cache';
 
 const urlsToCache = [
   '/',
   'index.html', // Add any other essential files here (e.g., stylesheets, JavaScript files, images, etc.)
-  'chrono-chime-icon-32.png',
+  'chrono-chime-icon42.png',
   'chrono-chime-icon-192.png',
   'chrono-chime-icon-512.png',
   'chrono-chime-maskable-icon-192.png',
