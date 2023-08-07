@@ -1,4 +1,4 @@
-const VERSION = 'v1.1.62';
+const VERSION = 'v1.1.63';
 const CACHE_NAME = 'chrono-chime-hourly-notification-cache';
 
 const urlsToCache = [
