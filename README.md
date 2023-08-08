@@ -1,6 +1,6 @@
 # ChronoChime
 
-![ChronoChime Logo](./chrono-chime-icon-192.png)
+![ChronoChime Logo](https://github.com/svijaykoushik/chorno-chime/blob/main/chrono-chime-icon-192.png)
 
 Welcome to ChronoChime, an elegant Progressive Web App (PWA) that sends you hourly notifications along with a soothing chime. Stay on track and manage your time effortlessly with ChronoChime!
 
