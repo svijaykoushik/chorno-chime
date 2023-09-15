@@ -106,7 +106,9 @@
             }
 
             /* Add styles for the text content */
-            h1 {
+            /* Add styles for the text content */
+            h1,
+            h2 {
                 color: black;
                 font-weight: 100;
             }
@@ -117,8 +119,8 @@
             }
 
             /* Add styles for the button */
-            #askPermissionButton {
-                background-color: #007bff;
+            .cta-button {
+                background-color: #f589b2;
                 color: white;
                 padding: 10px 20px;
                 border: none;
@@ -131,17 +133,17 @@
             }
 
             /* Add hover effect for the button */
-            #askPermissionButton:hover {
+            .cta-button:hover {
                 background-color: #0056b3;
             }
 
             /* Add a greyscale effect when the button is disabled */
-            #askPermissionButton[disabled] {
+            .cta-button[disabled] {
                 filter: grayscale(100%);
                 cursor: not-allowed;
             }
 
-            #askPermissionButton:active {
+            .cta-button:active {
                 transform: scale(0.95);
                 /* Slight scale down when the button is pressed */
             }
@@ -151,8 +153,10 @@
             .background-wrapper {
                 opacity: 0;
                 /* Set initial opacity to 0 */
-                transition: opacity 0.5s cubic-bezier(0.4, 0, 1, 1);
-                /* Apply a smooth opacity transition */
+                transition: opacity 0.5s cubic-bezier(0.4, 0, 1, 1),
+                    width 0.3s ease-in-out, height 0.3s ease-in-out;
+                /* Apply a smooth opacity transition,
+                   Add transition properties for size change */
             }
 
             a,
@@ -206,17 +210,82 @@
                 opacity: 1;
                 transform: translateX(-50%) translateY(0);
             }
+
+            /* Style for the tabs */
+            .tab {
+                overflow: hidden;
+                background-color: rgba(255, 255, 255, 0.8);
+            }
+
+            /* Style for the tab buttons */
+            .tab button {
+                background-color: inherit;
+                float: left;
+                border: none;
+                outline: none;
+                cursor: pointer;
+                padding: 14px 16px;
+                transition: border-bottom 0.3s ease-in-out, 0.3s ease-in-out;
+            }
+
+            /* Change color on hover */
+            .tab button:hover {
+                background-color: #ddd;
+            }
+
+            /* Style for the tab content */
+            .tabcontent {
+                display: none;
+            }
+
+            /* Style for the active tab content */
+            .tabcontent-active {
+                display: block;
+            }
+            /* Add a bottom border to the active tab */
+            .tab button.active {
+                border-bottom: 2px solid #f589b2;
+            }
+            
+            .custom-select {
+                position: relative;
+                display: inline-block;
+            }
+
+            .custom-select select {
+                appearance: none;
+                -webkit-appearance: none;
+                -moz-appearance: none;
+                background-color: transparent;
+                border: 1px solid #ccc;
+                padding: 5px 10px;
+                border-radius: 5px;
+            }
+
+            .custom-select button {
+                background-color: #007bff;
+                color: white;
+                border: none;
+                border-radius: 0 5px 5px 0;
+                cursor: pointer;
+                padding: 5px 10px;
+            }
+
+            .custom-select button:hover {
+                background-color: #0056b3;
+            }
+
         </style>
         <script>
             document.addEventListener('DOMContentLoaded', function () {
-                const container = document.querySelector('.container');
+                // const container = document.querySelector('.container');
                 const backgroundWrapper = document.querySelector(
                     '.background-wrapper'
                 );
 
                 // Set a timeout to allow the DOM to render, then fade in the elements
                 setTimeout(function () {
-                    container.style.opacity = '1';
+                    // container.classList.add('active');
                     backgroundWrapper.style.opacity = '1';
                 }, 100);
             });
@@ -225,7 +294,7 @@
 
     <body>
         <div class="background-wrapper"></div>
-        <div class="container">
+        <div class="container" id="main">
             <h1>ChronoChime - Hourly Notification PWA</h1>
             <p id="countdownTimer"></p>
             <p>
@@ -243,7 +312,100 @@
                     >
                 </small>
             </p>
-            <button id="askPermissionButton">Allow Notifications</button>
+            <button id="askPermissionButton" class="cta-button">
+                Allow Notifications
+            </button>
+        </div>
+        <div class="container" id="settings">
+            <h1>Settings</h1>
+            <div class="tab">
+                <button
+                    class="tablinks"
+                    id="generalTabLink"
+                    onclick="openTab(event, 'general')"
+                >
+                    General ⚙️
+                </button>
+                <button
+                    class="tablinks"
+                    id="soundTabLink"
+                    onclick="openTab(event, 'sound')"
+                >
+                    Notification Sound 🔊
+                </button>
+                <button
+                    class="tablinks"
+                    id="contentTabLink"
+                    onclick="openTab(event, 'content')"
+                >
+                    Notification Content ✉️
+                </button>
+                <button
+                    class="tablinks"
+                    id="resetTabLink"
+                    onclick="openTab(event, 'reset')"
+                >
+                    Reset 🔄
+                </button>
+            </div>
+            <form id="settingsForm">
+                <section id="general" class="tabcontent">
+                    <h2>General ⚙️</h2>
+                    <p>
+                        <label for="interval">Interval ⏰:</label>
+                        <select id="interval" name="interval">
+                            <option value="1">1 hour</option>
+                            <option value="2">2 hours</option>
+                            <option value="3">3 hours</option>
+                        </select>
+                    </p>
+                </section>
+                <section id="sound" class="tabcontent">
+                    <h2>Notification Sound 🔊</h2>
+                    <p>
+                        <label for="notificationSound">Select Sound 🔉:</label>
+                        <div class="custom-select">
+                            <select id="notificationSound" name="notificationSound">
+                                <option value="sound1">Sound 1 🔔</option>
+                                <option value="sound2">Sound 2 🎵</option>
+                                <option value="sound3">Sound 3 🎶</option>
+                                <option value="mute">Mute 🔇</option>
+                            </select>
+                            <button id="playSoundButton">Preview Sound</button>
+                            <audio id="sound1Audio">
+                                <source src="notification.mp3" type="audio/mpeg">
+                            </audio>
+                            <audio id="sound2Audio">
+                                <source src="notification2.wav" type="audio/wav">
+                            </audio>
+                            <audio id="sound3Audio">
+                                <source src="notification3.wav" type="audio/wav">
+                            </audio>
+                        </div>                        
+                    </p>
+                </section>
+                <section id="content" class="tabcontent">
+                    <h2>Notification Content ✉️</h2>
+                    <p>
+                        <label for="notificationContent"
+                            >Custom Message 📝:</label
+                        >
+                        <textarea
+                            id="notificationContent"
+                            name="notificationContent"
+                            rows="4"
+                            cols="50"
+                        ></textarea>
+                    </p>
+                </section>
+                <section id="reset" class="tabcontent">
+                    <p>
+                        <button type="reset" class="cta-button">
+                            Reset to Default 🔄
+                        </button>
+                    </p>
+                </section>
+            </form>
         </div>
         <div id="offlineToast" class="toast">
             ChronoChime is now available offline.

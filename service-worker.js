@@ -1,4 +1,4 @@
-const VERSION = 'v1.1.64';
+const VERSION = 'v1.1.65';
 const CACHE_NAME = 'chrono-chime-hourly-notification-cache';
 
 const urlsToCache = [
@@ -12,7 +12,9 @@ const urlsToCache = [
   'script.js',
   '_eaefda17-e770-4fdd-9e81-78fe64f78502.jpeg',
   'https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,400;0,700;1,100;1,200;1,400;1,700&display=swap',
-  'notification.mp3'
+  'notification.mp3',
+  'notification2.wav',
+  'notification3.wav'
   // Add more URLs to cache as needed
 ];
 
