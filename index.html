@@ -50,6 +50,10 @@
                 font-display: swap;
             }
 
+            *{
+                box-sizing: border-box;
+            }
+
             /* Apply Font style */
             body,
             h1,
@@ -103,6 +107,7 @@
                 /* Set the .container as the positioning context for its children */
                 z-index: 1;
                 /* Ensure it appears above the background */
+                max-width: 100%;
             }
 
             /* Add styles for the text content */
@@ -120,7 +125,7 @@
 
             /* Add styles for the button */
             .cta-button {
-                background-color: #f589b2;
+                background-color: hsl(337, 84%, 75%);
                 color: white;
                 padding: 10px 20px;
                 border: none;
@@ -134,7 +139,7 @@
 
             /* Add hover effect for the button */
             .cta-button:hover {
-                background-color: #0056b3;
+                background-color: hsl(337, 84%, 35%);
             }
 
             /* Add a greyscale effect when the button is disabled */
@@ -213,8 +218,9 @@
 
             /* Style for the tabs */
             .tab {
-                overflow: hidden;
                 background-color: rgba(255, 255, 255, 0.8);
+                display: flex;
+                justify-content: space-around;
             }
 
             /* Style for the tab buttons */
@@ -275,6 +281,127 @@
                 background-color: #0056b3;
             }
 
+            /* Style for the app drawer container */
+            .drawer {
+                width: 250px;
+                background-color: rgba(255, 255, 255, 1);
+                position: fixed;
+                top: 0;
+                left: -250px; /* Initially hidden off-screen */
+                height: 100%;
+                box-shadow: -2px 0 5px rgba(0, 0, 0, 0.3);
+                transition: left 0.3s ease-in-out;
+                z-index: 2;
+            }
+
+            /* Style for the drawer header */
+            .drawer-header {
+                background-color: #f589b2;
+                color: white;
+                padding: 20px;
+                display: flex;
+                align-items: center;
+            }
+
+            .drawer-header a{                
+                color: white;
+                text-decoration: none;
+            }
+
+            .drawer-header a:hover{
+                color: white;
+            }
+
+            /* Style for the app logo */
+            .app-logo {
+                width: 40px;
+                height: 40px;
+                margin-right: 10px;
+            }
+
+            /* Style for the drawer menu (list of links) */
+            .drawer-menu {
+                list-style: none;
+                padding: 0;
+            }
+
+            .drawer-menu li {
+                padding: 15px;
+                border-bottom: 1px solid #ccc;
+            }
+
+            /* Style for links in the drawer menu */
+            .drawer-menu a {
+                text-decoration: none;
+                color: #333;
+                font-weight: 100;
+                display: block;
+            }
+
+            /* Hover effect for links */
+            .drawer-menu a:hover {
+                color: #f589b2;
+            }
+
+            /* Style for open drawer */
+            .drawer-open{
+                left:0;
+            }
+
+            /* Style for the button that toggles the app drawer */
+            .toggle-button {
+                position: fixed;
+                top: 20px; /* Adjust the top position as needed */
+                left: 20px; /* Adjust the left position as needed */
+                width: 40px;
+                height: 40px;
+                background-color: transparent;
+                cursor: pointer;
+                text-align: center;
+                z-index: 2; /* Ensure it's above other content */
+                transition: left 0.3s ease-in-out;
+            }
+
+            /* Style for the button icon (you can use an icon font or an image) */
+            .toggle-button::before {
+                content: '☰'; /* Unicode hamburger icon (you can change this) */
+                font-size: 24px;
+                color: #fff; /* Adjust the color as needed */
+                line-height: 40px;
+                text-align: center;
+            }
+
+            /* Show a shadow on hover to indicate interactivity */
+            .toggle-button:hover {
+                box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+            }
+
+            #askPermissionButton{
+                transition: opacity 0.2s ease-in-out;
+            }
+
+            .social-icons{
+                display: flex;
+                justify-content: space-evenly;
+                align-items: center;
+            }
+
+            .social-icons a{
+                text-decoration: none;
+                color: #fff;
+            }
+
+            .social-icons a:visited{
+                text-decoration: none;
+                color: #fff;
+            }
+
+            @media (min-width: 768px) {
+                .container {
+                    width: 720px
+                }
+            }
+
         </style>
         <script>
             document.addEventListener('DOMContentLoaded', function () {
@@ -294,26 +421,38 @@
 
     <body>
         <div class="background-wrapper"></div>
+        <div id="appDrawer" class="drawer">
+            <div class="drawer-header">
+                <!-- Your app logo and name -->
+                <a href="/"><img src="chrono-chime-icon-32.png" alt="ChronoChime Logo" class="app-logo" /></a>
+                <h2><a href="/">ChronoChime</a></h2>
+            </div>
+            <ul class="drawer-menu">
+                <!-- Links to different sections -->
+                <li><a href="/settings">🛠️ Settings</a></li>
+                <li><a href="/attributions">👍 Attributions</a></li>
+                <li><a href="/about">ℹ️ About</a></li>
+            </ul>
+            <!-- Social Icons Container -->
+            <div class="social-icons">
+                <a href="https://github.com/svijaykoushik/chorno-chime" target="_blank">
+                    <img src="github-mark.png" alt="GitHub" width="16" height="16" />
+                </a>
+                <a href="https://dev.to/svijaykoushik" target="_blank">
+                    <img src="dev-black.png" alt="Dev.to" width="16" height="16" />
+                </a>
+                <a href="https://twitter.com/VijaykoushikS" target="_blank">
+                    <img src="twitter-logo-black.png" alt="Twitter" width="16" height="16" />
+                </a>
+            </div>
+        </div>
+        <!-- Transparent button to toggle the app drawer -->
+        <div id="toggleDrawerButton" class="toggle-button"></div>          
         <div class="container" id="main">
             <h1>ChronoChime - Hourly Notification PWA</h1>
             <p id="countdownTimer"></p>
-            <p>
-                <small>
-                    Sound Effect by
-                    <a
-                        href="https://pixabay.com/users/universfield-28281460/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=123107"
-                    >
-                        UNIVERSFIELD</a
-                    >
-                    from
-                    <a
-                        href="https://pixabay.com/sound-effects//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=123107"
-                        >Pixabay</a
-                    >
-                </small>
-            </p>
             <button id="askPermissionButton" class="cta-button">
-                Allow Notifications
+                🥺 Allow Notifications
             </button>
         </div>
         <div class="container" id="settings">
@@ -324,35 +463,35 @@
                     id="generalTabLink"
                     onclick="openTab(event, 'general')"
                 >
-                    General ⚙️
+                    ⚙️ General
                 </button>
                 <button
                     class="tablinks"
                     id="soundTabLink"
                     onclick="openTab(event, 'sound')"
                 >
-                    Notification Sound 🔊
+                    🔊 Notification Sound
                 </button>
                 <button
                     class="tablinks"
                     id="contentTabLink"
                     onclick="openTab(event, 'content')"
                 >
-                    Notification Content ✉️
+                    ✉️ Notification Content 
                 </button>
                 <button
                     class="tablinks"
                     id="resetTabLink"
                     onclick="openTab(event, 'reset')"
                 >
-                    Reset 🔄
+                    🔄 Reset
                 </button>
             </div>
             <form id="settingsForm">
                 <section id="general" class="tabcontent">
                     <h2>General ⚙️</h2>
                     <p>
-                        <label for="interval">Interval ⏰:</label>
+                        <label for="interval">⏰ Interval:</label>
                         <select id="interval" name="interval">
                             <option value="1">1 hour</option>
                             <option value="2">2 hours</option>
@@ -361,15 +500,15 @@
                     </p>
                 </section>
                 <section id="sound" class="tabcontent">
-                    <h2>Notification Sound 🔊</h2>
+                    <h2>🔊 Notification Sound</h2>
                     <p>
-                        <label for="notificationSound">Select Sound 🔉:</label>
+                        <label for="notificationSound">🔉 Select Sound:</label>
                         <div class="custom-select">
                             <select id="notificationSound" name="notificationSound">
-                                <option value="sound1">Sound 1 🔔</option>
-                                <option value="sound2">Sound 2 🎵</option>
-                                <option value="sound3">Sound 3 🎶</option>
-                                <option value="mute">Mute 🔇</option>
+                                <option value="sound1">🔔 Sound 1</option>
+                                <option value="sound2">🎵 Sound 2</option>
+                                <option value="sound3">🎶 Sound 3</option>
+                                <option value="mute">🔇 Mute</option>
                             </select>
                             <button id="playSoundButton">Preview Sound</button>
                             <audio id="sound1Audio">
@@ -388,7 +527,7 @@
                     <h2>Notification Content ✉️</h2>
                     <p>
                         <label for="notificationTitle"
-                            >Custom Title 📛:</label
+                            >📛 Custom Title:</label
                         >
                         <input
                             type="text"
@@ -398,7 +537,7 @@
                     </p>
                     <p>
                         <label for="notificationContent"
-                            >Custom Message 📝:</label
+                            >📝 Custom Message:</label
                         >
                         <textarea
                             id="notificationContent"
@@ -409,18 +548,67 @@
                     </p>
                     <p>
                         <button id="previewNotification" type="button" class="cta-button">
-                            Preview Notification 🔔
+                            🔔 Preview Notification
                         </button>
                     </p>
                 </section>
                 <section id="reset" class="tabcontent">
                     <p>
                         <button type="button" class="cta-button" id="resetSettings">
-                            Reset to Default 🔄
+                            🔄 Reset to Default
                         </button>
                     </p>
                 </section>
             </form>
+        </div>       
+        <div class="container" id="attributions">
+            <h1>Attributions</h1>
+            <p>
+                Sound 1 by <a
+                href="https://pixabay.com/users/universfield-28281460/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=123107"
+            >
+                UNIVERSFIELD</a
+            >
+            from
+            <a
+                href="https://pixabay.com/sound-effects//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=123107"
+                >Pixabay</a
+            >
+            </p>
+            <p>
+                Sound 2 by <a
+                href="https://freesound.org/people/Thoribass/"
+            >
+            Thoribass</a
+            >
+            from
+            <a
+                href="https://freesound.org/people/Thoribass/sounds/254819/"
+                >freesound
+            </a>
+            </p>
+            <p>
+                Sound 3 by <a
+                href="https://freesound.org/people/InspectorJ/"
+            >
+            InspectorJ</a
+            >
+            from
+            <a
+                href="https://freesound.org/people/InspectorJ/sounds/413749/"
+                >freesound
+            </a>
+            </p>
+        </div>
+        <div class="container" id="about">
+            <h1>About</h1>
+            <p>
+                Stay organized and on track with hourly notifications from 
+                ChronoChime, the elegant and intuitive Progressive Web App 
+                (PWA) that helps you manage your time effectively. 
+                Allow notifications and receive gentle reminders throughout the 
+                day.
+            </p>
         </div>
         <div id="offlineToast" class="toast">
             ChronoChime is now available offline.

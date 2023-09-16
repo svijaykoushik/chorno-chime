@@ -13,6 +13,10 @@ const sound1Audio = document.getElementById('sound1Audio');
 const sound2Audio = document.getElementById('sound2Audio');
 const sound3Audio = document.getElementById('sound3Audio');
 
+// Get references to the app drawer and toggle button
+const appDrawer = document.getElementById('appDrawer');
+const toggleButton = document.getElementById('toggleDrawerButton');
+
 const defaultSettings = {
     interval: '1', // Default interval, e.g., '1' for 1 hour
     notificationSound: 'sound1', // Default sound, e.g., 'sound1',
@@ -89,20 +93,24 @@ function askNotificationPermission() {
     if ('Notification' in window) {
         if (Notification.permission === 'granted') {
             console.log('Notification permission already granted.');
-            askPermissionButton.disabled = true;
+            askPermissionButton.style.opacity = 0;
+            askPermissionButton.style.visibility = 'hidden';
             scheduleNotifications();
         } else if (Notification.permission === 'denied') {
-            askPermissionButton.disabled = false;
+            askPermissionButton.style.opacity = 1;
+            askPermissionButton.style.visibility = 'visible';
             console.warn('Notification permission denied.');
         } else {
             // Request permission only when the user explicitly interacts with a button or similar action.
-            askPermissionButton.disabled = false;
+            askPermissionButton.style.opacity = 1;
+            askPermissionButton.style.visibility = 'visible';
             askPermissionButton.addEventListener('click', () => {
                 Notification.requestPermission()
                     .then((permission) => {
                         if (permission === 'granted') {
                             console.log('Notification permission granted.');
-                            askPermissionButton.disabled = true;
+                            askPermissionButton.style.opacity = 0;
+                            askPermissionButton.style.visibility = 'hidden';
                             scheduleNotifications();
                         } else {
                             console.warn('Notification permission denied.');
@@ -187,7 +195,10 @@ function scheduleNotifications() {
     // Start the countdown timer
     resetCountdownTime(timeUntilNextHour);
     updateCountdownTimer(intervalHours);
-    countdownInterval = setInterval(() => updateCountdownTimer(intervalHours), 1000); // Update every second
+    countdownInterval = setInterval(
+        () => updateCountdownTimer(intervalHours),
+        1000
+    ); // Update every second
 
     setTimeout(() => {
         console.log(
@@ -203,7 +214,7 @@ function scheduleNotifications() {
             showNotification();
             resetCountdownTime(intervalHours * 60 * 60 * 1000); // Reset the countdown to 1 hour
             updateCountdownTimer();
-        }, intervalHours* 60 * 60 * 1000); // Repeat every hour
+        }, intervalHours * 60 * 60 * 1000); // Repeat every hour
     }, timeUntilNextHour);
 }
 
@@ -230,12 +241,10 @@ function updateCountdownTimer(intervalHours) {
 
         // Update the countdown timer on the HTML element with ID 'countdownTimer'
         let text = `Next notification in ${minutes}m ${seconds}s`;
-        if(hours> 0){
+        if (hours > 0) {
             text = `Next notification in ${hours}h ${minutes}m ${seconds}s`;
         }
-        document.getElementById(
-            'countdownTimer'
-        ).textContent = text;
+        document.getElementById('countdownTimer').textContent = text;
     }
 }
 
@@ -291,13 +300,22 @@ function setElementPropertiesWithFadeIn(element, displayValue) {
 function loadContent(url) {
     const mainContainer = document.getElementById('main');
     const settingsContainer = document.getElementById('settings');
+    const containers = document.getElementsByClassName('container');
     settings = getSettingsFromLocalStorage();
+
+    for (const container of containers) {
+        if (
+            url.includes(container.id) ||
+            (url === '/' && container.id === 'main')
+        ) {
+            setElementPropertiesWithFadeIn(container, 'block');
+        } else {
+            setElementPropertiesWithFadeIn(container, 'none');
+        }
+    }
 
     // Check if the URL matches the "/settings" route
     if (url === '/settings') {
-        setElementPropertiesWithFadeIn(mainContainer, 'none');
-        setElementPropertiesWithFadeIn(settingsContainer, 'block');
-
         // Automatically open the 'General' tab when the page loads
         document.getElementById('general').classList.add('tabcontent-active');
         document.getElementById('generalTabLink').classList.add('active');
@@ -305,8 +323,6 @@ function loadContent(url) {
         // load settings from local storage and populate the form
         initializeSettingsForm(settings);
     } else {
-        setElementPropertiesWithFadeIn(mainContainer, 'block');
-        setElementPropertiesWithFadeIn(settingsContainer, 'none');
         scheduleNotifications();
     }
 }
@@ -328,6 +344,7 @@ navLinks.forEach((link) => {
 // Listen for the popstate event to handle back/forward navigation
 window.addEventListener('popstate', () => {
     const url = window.location.pathname;
+    console.log('Navigation to %s due to history change', url);
     loadContent(url);
 });
 
@@ -396,15 +413,15 @@ function initializeSettingsForm(settingsArg) {
 
     if ('Notification' in window) {
         if (Notification.permission === 'granted') {
-            previewNotificationBtn.innerText = 'Preview Notification 🔔';
+            previewNotificationBtn.innerText = '🔔 Preview Notification';
             previewNotificationBtn.disabled = false;
             scheduleNotifications();
         } else if (Notification.permission === 'denied') {
-            previewNotificationBtn.innerText = 'Preview Notification 🔔';
+            previewNotificationBtn.innerText = '🔔 Preview Notification';
             previewNotificationBtn.disabled = true;
             console.warn('Notification permission denied.');
         } else {
-            previewNotificationBtn.innerText = 'Ask permission 🙋';
+            previewNotificationBtn.innerText = '🥺 Ask permission';
             previewNotificationBtn.disabled = false;
         }
     }
@@ -465,7 +482,8 @@ previewNotificationBtn.addEventListener('click', (e) => {
                     if (permission === 'granted') {
                         console.log('Notification permission granted.');
                         previewNotificationBtn.disabled = false;
-                        previewNotificationBtn.innerText = 'Preview Notification 🔔';
+                        previewNotificationBtn.innerText =
+                            'Preview Notification 🔔';
                         scheduleNotifications();
                     } else {
                         previewNotificationBtn.disabled = true;
@@ -487,6 +505,31 @@ resetSettingsButton.addEventListener('click', (e) => {
     settings = getSettingsFromLocalStorage();
     initializeSettingsForm(settings);
 });
+
+// Add a click event listener to the toggle button
+toggleButton.addEventListener('click', () => {
+    // Toggle the app drawer by adjusting its right property
+    appDrawer.classList.toggle('drawer-open');
+
+    // Reposition the toggle button
+    toggleButtonPosition();
+});
+
+function toggleButtonPosition() {
+    const isOpen = appDrawer.classList.contains('drawer-open');
+    if (isOpen) {
+        // Calculate the button's position relative to the drawer when it's open
+        const drawerRect = appDrawer.getBoundingClientRect();
+        const buttonRect = toggleButton.getBoundingClientRect();
+        const leftOffset = buttonRect.left - drawerRect.left;
+
+        toggleButton.style.left = leftOffset + 'px';
+    } else {
+        // Bring the button back to its original position when the drawer is closed
+        toggleButton.style.left = '15px'; // Adjust as needed
+    }
+}
+
 // Listen for online/offline events
 window.addEventListener('online', handleOnlineStatus);
 window.addEventListener('offline', handleOnlineStatus);
