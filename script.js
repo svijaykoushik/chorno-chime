@@ -2,18 +2,30 @@ let notificationInterval; // Store the interval ID for the notification timer
 let countdownInterval; // Store the interval ID for the countdown timer
 let countdownTimeRemaining = 0; // Global variable to store the countdown time in milliseconds
 
+const soundSelect = document.getElementById('notificationSound');
+const intervalSelect = document.getElementById('interval');
+const notificationTitleText = document.getElementById('notificationTitle');
+const notificationContentText = document.getElementById('notificationContent');
+const previewNotificationBtn = document.getElementById('previewNotification');
+const resetSettingsButton = document.getElementById('resetSettings');
+const playButton = document.getElementById('playSoundButton');
+const sound1Audio = document.getElementById('sound1Audio');
+const sound2Audio = document.getElementById('sound2Audio');
+const sound3Audio = document.getElementById('sound3Audio');
+
 const defaultSettings = {
     interval: '1', // Default interval, e.g., '1' for 1 hour
-    notificationSound: 'sound1', // Default sound, e.g., 'sound1'
+    notificationSound: 'sound1', // Default sound, e.g., 'sound1',
+    notificationTitle: 'Hourly notification',
     notificationContent: 'This is an hourly notification from ChronoChime!', // Default content
 };
 
 // Store the settings object in localStorage
-if (!getSettingsFromLocalStorage) {
+if (!getSettingsFromLocalStorage()) {
     saveSettingsToLocalStorage(defaultSettings);
 }
 
-const settings = getSettingsFromLocalStorage();
+let settings = getSettingsFromLocalStorage() || defaultSettings;
 
 // Check if the browser supports Service Workers
 if ('serviceWorker' in navigator) {
@@ -123,10 +135,10 @@ function showNotification() {
             sound = 'notification.mp3';
             break;
         case 'sound2':
-            sound = 'notification2.wav'
+            sound = 'notification2.wav';
             break;
         case 'sound3':
-            sound = 'notification3.wav'
+            sound = 'notification3.wav';
             break;
         case 'mute':
             sound = '';
@@ -141,25 +153,25 @@ function showNotification() {
 
     // Send the notification
     if ('Notification' in window && Notification.permission === 'granted') {
-        new Notification('Hourly Notification', options);
+        new Notification(settings.notificationTitle, options);
     }
 }
 
 // Schedule hourly notifications
 function scheduleNotifications() {
     let intervalHours = 1;
-    switch (settings.notificationInterval) {
+    switch (settings.interval) {
         case '1':
-            intervalHours = 1
+            intervalHours = 1;
             break;
-        case '12':
-            intervalHours = 2
+        case '2':
+            intervalHours = 2;
             break;
         case '3':
-            intervalHours = 3
+            intervalHours = 3;
             break;
         default:
-            intervalHours = 1
+            intervalHours = 1;
             break;
     }
     const now = new Date();
@@ -172,11 +184,10 @@ function scheduleNotifications() {
     clearInterval(notificationInterval);
     clearInterval(countdownInterval);
 
-    // Show the initial notification and start the countdown timer
-    showNotification();
+    // Start the countdown timer
     resetCountdownTime(timeUntilNextHour);
-    updateCountdownTimer();
-    countdownInterval = setInterval(updateCountdownTimer, 1000); // Update every second
+    updateCountdownTimer(intervalHours);
+    countdownInterval = setInterval(() => updateCountdownTimer(intervalHours), 1000); // Update every second
 
     setTimeout(() => {
         console.log(
@@ -185,21 +196,19 @@ function scheduleNotifications() {
         );
 
         showNotification();
-        resetCountdownTime(60 * 60 * 1000);
-        updateCountdownTimer();
+        resetCountdownTime(intervalHours * 60 * 60 * 1000);
+        updateCountdownTimer(intervalHours);
         notificationInterval = setInterval(() => {
-            console.log(
-                'Starting notification interval '
-            );
+            console.log('Starting notification interval ');
             showNotification();
-            resetCountdownTime(60 * 60 * 1000);// Reset the countdown to 1 hour
+            resetCountdownTime(intervalHours * 60 * 60 * 1000); // Reset the countdown to 1 hour
             updateCountdownTimer();
-        }, 60 * 60 * 1000); // Repeat every hour
+        }, intervalHours* 60 * 60 * 1000); // Repeat every hour
     }, timeUntilNextHour);
 }
 
 // Function to update the countdown timer
-function updateCountdownTimer() {
+function updateCountdownTimer(intervalHours) {
     countdownTimeRemaining -= 1000; // Subtract 1 second (1000 milliseconds) from the remaining time
 
     if (countdownTimeRemaining <= 0) {
@@ -207,19 +216,26 @@ function updateCountdownTimer() {
         clearInterval(countdownInterval);
 
         // Reset the countdown time to 1 hour and update the countdown timer accordingly
-        resetCountdownTime(60 * 60 * 1000);
-        updateCountdownTimer();
+        resetCountdownTime(intervalHours * 60 * 60 * 1000);
+        updateCountdownTimer(intervalHours);
     } else {
-        // Calculate the countdown time (in minutes and seconds)
+        // Calculate the countdown time (in hours, minutes and seconds)
+        const hours = Math.floor(countdownTimeRemaining / (1000 * 60 * 60));
         const minutes = Math.floor(
             (countdownTimeRemaining % (1000 * 60 * 60)) / (1000 * 60)
         );
-        const seconds = Math.floor((countdownTimeRemaining % (1000 * 60)) / 1000);
+        const seconds = Math.floor(
+            (countdownTimeRemaining % (1000 * 60)) / 1000
+        );
 
         // Update the countdown timer on the HTML element with ID 'countdownTimer'
+        let text = `Next notification in ${minutes}m ${seconds}s`;
+        if(hours> 0){
+            text = `Next notification in ${hours}h ${minutes}m ${seconds}s`;
+        }
         document.getElementById(
             'countdownTimer'
-        ).textContent = `Next notification in ${minutes}m ${seconds}s`;
+        ).textContent = text;
     }
 }
 
@@ -275,6 +291,7 @@ function setElementPropertiesWithFadeIn(element, displayValue) {
 function loadContent(url) {
     const mainContainer = document.getElementById('main');
     const settingsContainer = document.getElementById('settings');
+    settings = getSettingsFromLocalStorage();
 
     // Check if the URL matches the "/settings" route
     if (url === '/settings') {
@@ -282,12 +299,15 @@ function loadContent(url) {
         setElementPropertiesWithFadeIn(settingsContainer, 'block');
 
         // Automatically open the 'General' tab when the page loads
-        document.getElementById("general").classList.add('tabcontent-active');
-        document.getElementById("generalTabLink").classList.add("active");
+        document.getElementById('general').classList.add('tabcontent-active');
+        document.getElementById('generalTabLink').classList.add('active');
 
+        // load settings from local storage and populate the form
+        initializeSettingsForm(settings);
     } else {
         setElementPropertiesWithFadeIn(mainContainer, 'block');
         setElementPropertiesWithFadeIn(settingsContainer, 'none');
+        scheduleNotifications();
     }
 }
 
@@ -301,7 +321,7 @@ function handleNavigation(event) {
 
 // Attach click event listeners to navigation links
 const navLinks = document.querySelectorAll('nav a');
-navLinks.forEach(link => {
+navLinks.forEach((link) => {
     link.addEventListener('click', handleNavigation);
 });
 
@@ -319,20 +339,20 @@ function openTab(evt, tabName) {
     var i, tabcontent, tablinks;
 
     // Hide all tab content
-    tabcontent = document.getElementsByClassName("tabcontent");
+    tabcontent = document.getElementsByClassName('tabcontent');
     for (i = 0; i < tabcontent.length; i++) {
         tabcontent[i].classList.remove('tabcontent-active');
     }
 
     // Deactivate all tab buttons
-    tablinks = document.getElementsByClassName("tablinks");
+    tablinks = document.getElementsByClassName('tablinks');
     for (i = 0; i < tablinks.length; i++) {
-        tablinks[i].classList.remove("active"); // Remove 'active' class from all buttons
+        tablinks[i].classList.remove('active'); // Remove 'active' class from all buttons
     }
 
     // Show the selected tab content and mark the button as active
     document.getElementById(tabName).classList.add('tabcontent-active');
-    evt.currentTarget.classList.add("active");
+    evt.currentTarget.classList.add('active');
 }
 
 function saveSettingsToLocalStorage(settings) {
@@ -353,16 +373,47 @@ function getSettingsFromLocalStorage() {
     return settings;
 }
 
-const soundSelect = document.getElementById('notificationSound');
-const playButton = document.getElementById('playSoundButton');
-const sound1Audio = document.getElementById('sound1Audio');
-const sound2Audio = document.getElementById('sound2Audio');
-const sound3Audio = document.getElementById('sound3Audio');
+function initializeSettingsForm(settingsArg) {
+    // Set the selected option based on the loaded setting
+    if (settingsArg.notificationSound) {
+        soundSelect.value = settingsArg.notificationSound;
+    }
+
+    // Set the selected option based on the loaded setting
+    if (settingsArg.interval) {
+        intervalSelect.value = settingsArg.interval;
+    }
+
+    // Set the  title text
+    if (settingsArg.notificationTitle) {
+        notificationTitleText.value = settingsArg.notificationTitle;
+    }
+
+    // Set the content text
+    if (settingsArg.notificationContent) {
+        notificationContentText.value = settingsArg.notificationContent;
+    }
+
+    if ('Notification' in window) {
+        if (Notification.permission === 'granted') {
+            previewNotificationBtn.innerText = 'Preview Notification 🔔';
+            previewNotificationBtn.disabled = false;
+            scheduleNotifications();
+        } else if (Notification.permission === 'denied') {
+            previewNotificationBtn.innerText = 'Preview Notification 🔔';
+            previewNotificationBtn.disabled = true;
+            console.warn('Notification permission denied.');
+        } else {
+            previewNotificationBtn.innerText = 'Ask permission 🙋';
+            previewNotificationBtn.disabled = false;
+        }
+    }
+}
 
 playButton.addEventListener('click', (e) => {
     e.preventDefault();
     const selectedSound = soundSelect.value;
-    
+
     sound1Audio.pause();
     sound2Audio.pause();
     sound3Audio.pause();
@@ -379,7 +430,63 @@ playButton.addEventListener('click', (e) => {
     }
 });
 
+soundSelect.addEventListener('change', () => {
+    settings.notificationSound = soundSelect.value;
+    saveSettingsToLocalStorage(settings);
+});
 
+intervalSelect.addEventListener('change', () => {
+    settings.interval = intervalSelect.value;
+    saveSettingsToLocalStorage(settings);
+    scheduleNotifications();
+});
+
+notificationTitleText.addEventListener('change', () => {
+    settings.notificationTitle = notificationTitleText.value;
+    saveSettingsToLocalStorage(settings);
+});
+
+notificationContentText.addEventListener('change', () => {
+    settings.notificationContent = notificationContentText.value;
+    saveSettingsToLocalStorage(settings);
+});
+
+previewNotificationBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    if ('Notification' in window) {
+        if (Notification.permission === 'granted') {
+            showNotification();
+        } else if (
+            Notification.permission !== 'granted' &&
+            Notification.permission !== 'denied'
+        ) {
+            Notification.requestPermission()
+                .then((permission) => {
+                    if (permission === 'granted') {
+                        console.log('Notification permission granted.');
+                        previewNotificationBtn.disabled = false;
+                        previewNotificationBtn.innerText = 'Preview Notification 🔔';
+                        scheduleNotifications();
+                    } else {
+                        previewNotificationBtn.disabled = true;
+                        console.warn('Notification permission denied.');
+                    }
+                })
+                .catch((error) => {
+                    console.error(
+                        'Error requesting notification permission:',
+                        error
+                    );
+                });
+        }
+    }
+});
+
+resetSettingsButton.addEventListener('click', (e) => {
+    saveSettingsToLocalStorage(defaultSettings);
+    settings = getSettingsFromLocalStorage();
+    initializeSettingsForm(settings);
+});
 // Listen for online/offline events
 window.addEventListener('online', handleOnlineStatus);
 window.addEventListener('offline', handleOnlineStatus);

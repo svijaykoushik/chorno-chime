@@ -246,7 +246,7 @@
             .tab button.active {
                 border-bottom: 2px solid #f589b2;
             }
-            
+
             .custom-select {
                 position: relative;
                 display: inline-block;
@@ -387,20 +387,35 @@
                 <section id="content" class="tabcontent">
                     <h2>Notification Content ✉️</h2>
                     <p>
+                        <label for="notificationTitle"
+                            >Custom Title 📛:</label
+                        >
+                        <input
+                            type="text"
+                            id="notificationTitle"
+                            name="notificationTitle"
+                        />
+                    </p>
+                    <p>
                         <label for="notificationContent"
                             >Custom Message 📝:</label
                         >
                         <textarea
                             id="notificationContent"
                             name="notificationContent"
-                            rows="4"
-                            cols="50"
+                            rows="1"
+                            cols="30"
                         ></textarea>
+                    </p>
+                    <p>
+                        <button id="previewNotification" type="button" class="cta-button">
+                            Preview Notification 🔔
+                        </button>
                     </p>
                 </section>
                 <section id="reset" class="tabcontent">
                     <p>
-                        <button type="reset" class="cta-button">
+                        <button type="button" class="cta-button" id="resetSettings">
                             Reset to Default 🔄
                         </button>
                     </p>
