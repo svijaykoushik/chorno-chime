@@ -2,10 +2,12 @@
   "name": "ChronoChime - Hourly Notification PWA",
   "short_name": "ChronoChime",
   "start_url": ".",
+  "display_override": ["window-controls-overlay"],
   "display": "standalone",
   "background_color": "#f589b2",
   "theme_color": "#f589b2",
   "orientation": "portrait",
+  "lang": "en-US",
   "icons": [
     {
       "src": "chrono-chime-icon-192.png?v=2",
@@ -30,6 +32,20 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maksable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Open Settings",
+      "short_name": "Settings",
+      "description": "View and modify the settings of chronochime",
+      "url": "/settings?utm_source=homescreen",
+      "icons": [
+        {
+          "src": "chrono-chime-icon-192.png?v=1",
+          "sizes": "192x192"
+        }
+      ]
     }
   ]
 }
