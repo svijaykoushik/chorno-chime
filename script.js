@@ -321,8 +321,11 @@ function loadContent(url) {
         document.getElementById('generalTabLink').classList.add('active');
 
         // load settings from local storage and populate the form
+        settings = getSettingsFromLocalStorage();
+        scheduleNotifications();
         initializeSettingsForm(settings);
     } else {
+        settings = getSettingsFromLocalStorage();
         scheduleNotifications();
     }
 }
