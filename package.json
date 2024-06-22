@@ -18,6 +18,6 @@
   },
   "homepage": "https://github.com/svijaykoushik/chorno-chime#readme",
   "devDependencies": {
-    "firebase-tools": "^12.4.7"
+    "firebase-tools": "^13.11.4"
   }
 }
