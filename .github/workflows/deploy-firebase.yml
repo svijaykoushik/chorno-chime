@@ -6,20 +6,13 @@ on:
       - main
 
 jobs:
-  build-and-deploy:
+  build_and_deploy:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
+      - uses: actions/checkout@v4
+      - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
-          node-version: '16' # Update this to a compatible Node.js version
-
-      - name: Install project dependencies
-        run: npm ci
-
-      - name: Deploy to Firebase Hosting
-        run: npx firebase deploy --only hosting --token ${{ secrets.FIREBASE_TOKEN }}
+          repoToken: '${{ secrets.GITHUB_TOKEN }}'
+          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_CHRONO_CHIME }}'
+          channelId: live
+          projectId: chrono-chime
