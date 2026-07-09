@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Preconnect to Google Fonts for FCP optimization -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <title>ChronoChime — A calm, reliable temporal notification companion</title>
+    <meta name="description" content="ChronoChime reliably notifies people when their chosen temporal conditions become true. Local-first, private, and customizable.">
+    <link rel="icon" type="image/png" sizes="32x32" href="chrono-chime-icon-32.png">
+    
+    <meta property="og:title" content="ChronoChime - Hourly Notification Desktop App">
+    <meta property="og:description" content="Stay organized and on track with hourly notifications from ChronoChime. Local, private, customizable routines.">
+    <meta property="og:image" content="chrono-chime-og-image.png">
+    <meta property="og:url" content="https://github.com/svijaykoushik/chrono-chime-desktop">
+    
+    <style>
+        /* Inlined Critical CSS */
+        :root {
+            --rose: #EE5A8A;
+            --bubblegum: #F589B2;
+            --blush: #FFF0F6;
+            --rose-deep: #C73E6E;
+            --bubblegum-light: #FBB6D0;
+            --text-dark: #1E1E24;
+            --surface: #FFFFFF;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Use system fonts initially to prevent FOIT, swap to Poppins/Outfit later */
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: var(--blush);
+            color: var(--text-dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Load Google Fonts asynchronously with display: swap */
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Poppins:wght@300;400;500;600&display=swap');
+
+        /* Apply loaded fonts to elements */
+        body.fonts-loaded, 
+        body.fonts-loaded h1, 
+        body.fonts-loaded h2, 
+        body.fonts-loaded h3, 
+        body.fonts-loaded p, 
+        body.fonts-loaded a, 
+        body.fonts-loaded button {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body.fonts-loaded h1, 
+        body.fonts-loaded h2, 
+        body.fonts-loaded .font-outfit {
+            font-family: 'Outfit', sans-serif;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* Navbar */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 5%;
+            background: rgba(255, 240, 246, 0.85);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: var(--rose);
+        }
+
+        .nav-brand img {
+            width: 32px;
+            height: 32px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--rose);
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem 1.5rem;
+            border-radius: 16px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            border: none;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background-color: var(--rose-deep);
+            color: white;
+            box-shadow: 0 4px 14px rgba(199, 62, 110, 0.4);
+        }
+
+        .btn-primary:hover {
+            background-color: #A62E58;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(199, 62, 110, 0.5);
+        }
+
+        .btn-secondary {
+            background-color: white;
+            color: var(--rose);
+            border: 2px solid var(--bubblegum-light);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--rose);
+            background-color: var(--blush);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 120px 5% 60px;
+            text-align: center;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: #4A4A52;
+            margin-bottom: 2.5rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Mockup */
+        .mockup-container {
+            margin: 40px auto 80px;
+            max-width: 900px;
+            padding: 0 5%;
+        }
+
+        .mockup-frame {
+            background: var(--surface);
+            border-radius: 16px;
+            padding: 10px;
+            box-shadow: 0 20px 40px rgba(238, 90, 138, 0.15);
+            /* Skeleton spacer to prevent CLS */
+            aspect-ratio: 1111 / 723;
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .mockup-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 12px;
+            display: block;
+        }
+
+        /* Features */
+        .features {
+            background: white;
+            padding: 80px 5%;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.25rem;
+            margin-bottom: 3rem;
+            color: var(--text-dark);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            background: var(--blush);
+            padding: 2rem;
+            border-radius: 16px;
+            text-align: left;
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-card h3 {
+            font-size: 1.25rem;
+            color: var(--rose);
+            margin-bottom: 1rem;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .feature-card p {
+            color: #4A4A52;
+            font-size: 1rem;
+        }
+
+        /* Screenshots Showcase */
+        .showcase {
+            padding: 80px 5%;
+            background: var(--blush);
+        }
+
+        .showcase-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .showcase-img {
+            width: 100%;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            aspect-ratio: 1111 / 723;
+            object-fit: cover;
+        }
+
+        /* Download Section */
+        .download {
+            padding: 100px 5%;
+            text-align: center;
+            background: white;
+        }
+
+        .download h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .download-actions {
+            margin-top: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
+        }
+
+        /* Footer */
+        .footer {
+            padding: 40px 5%;
+            text-align: center;
+            background: var(--text-dark);
+            color: white;
+        }
+
+        .footer p {
+            opacity: 0.8;
+            font-size: 0.9rem;
+        }
+        
+        .footer a {
+            color: var(--bubblegum);
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.2rem; }
+            .nav-links { display: none; } /* Simplified mobile nav */
+            .showcase-grid { grid-template-columns: 1fr; }
+        }
+
+        /* SVG Icons */
+        .icon { width: 24px; height: 24px; fill: currentColor; }
+    </style>
+</head>
+<body>
+    <script>
+        // Set a class when fonts are loaded to swap them in
+        if (document.fonts) {
+            document.fonts.ready.then(function () {
+                document.body.classList.add('fonts-loaded');
+            });
+        } else {
+            document.body.classList.add('fonts-loaded');
+        }
+    </script>
+
+    <nav class="navbar">
+        <a href="#" class="nav-brand">
+            <img src="chrono-chime-icon-32.png" alt="ChronoChime Logo" width="32" height="32">
+            ChronoChime
+        </a>
+        <div class="nav-links">
+            <a href="#features">Features</a>
+            <a href="#showcase">Screenshots</a>
+            <a href="https://github.com/svijaykoushik/chrono-chime-desktop" target="_blank" class="btn btn-secondary">
+                View on GitHub
+            </a>
+        </div>
+    </nav>
+
+    <main>
+    <section class="hero">
+        <h1 class="font-outfit">Keep track of time, beautifully and reliably.</h1>
+        <p>A calm, local-first temporal notification companion. No trackers, no cloud sync, just you and your schedule.</p>
+        
+        <div class="hero-actions" id="hero-downloads">
+            <!-- Dynamic OS Download Buttons -->
+            <a href="https://github.com/svijaykoushik/chrono-chime-desktop/releases/latest" class="btn btn-primary" id="btn-linux">
+                <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.5 14H7.5c-.83 0-1.5-.67-1.5-1.5V13h12v1.5c0 .83-.67 1.5-1.5 1.5zm1.5-4.5H6V10c0-3.31 2.69-6 6-6s6 2.69 6 6v1.5z"/></svg>
+                Download for Linux (.deb)
+            </a>
+            <a href="https://github.com/svijaykoushik/chrono-chime-desktop/releases/latest" class="btn btn-secondary" id="btn-windows">
+                <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M3 3h8v8H3zm10 0h8v8h-8zM3 13h8v8H3zm10 0h8v8h-8z"/></svg>
+                Download for Windows (.exe)
+            </a>
+        </div>
+    </section>
+
+    <div class="mockup-container">
+        <div class="mockup-frame">
+            <!-- fetchpriority="high" for LCP optimization -->
+            <img src="screenshot1.jpeg" alt="ChronoChime App Interface" width="1111" height="723" fetchpriority="high">
+        </div>
+    </div>
+
+    <section id="features" class="features">
+        <h2 class="section-title font-outfit">Core Philosophy</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <h3>Reliable Timing</h3>
+                <p>Precise scheduling intervals, drift prevention, and deterministic recurrence powered by a robust local engine.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Custom Sounds</h3>
+                <p>Personalize your experience with built-in sounds or provide your own audio chimes for notifications.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Composite Routines</h3>
+                <p>Build multi-step temporal workflows like Pomodoro sessions or study intervals natively.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Quiet Hours</h3>
+                <p>Set focus windows to respectfully suppress sound notifications when you need deep concentration.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Local-First & Private</h3>
+                <p>Powered by local SQLite. Zero cloud connections, zero telemetry. Your data never leaves your machine.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="showcase" class="showcase">
+        <h2 class="section-title font-outfit">Beautifully Simple</h2>
+        <div class="showcase-grid">
+            <!-- loading="lazy" for off-screen images -->
+            <img src="screenshot1.jpeg" alt="Main Interface" class="showcase-img" width="1111" height="723" loading="lazy">
+            <img src="screenshot2.jpeg" alt="Settings Interface" class="showcase-img" width="1111" height="723" loading="lazy">
+        </div>
+    </section>
+
+    <section class="download">
+        <h2 class="font-outfit">Ready to reclaim your time?</h2>
+        <div class="download-actions">
+            <a href="https://github.com/svijaykoushik/chrono-chime-desktop/releases/latest" class="btn btn-primary" style="padding: 1rem 3rem; font-size: 1.2rem;">
+                View Latest Releases
+            </a>
+            <p style="margin-top: 15px; color: #4A4A52;">Available for Windows and Linux.</p>
+        </div>
+    </section>
+    </main>
+
+    <footer class="footer">
+        <p>Built with care. MIT Licensed.</p>
+        <p>Designed under the <a href="https://github.com/svijaykoushik/chrono-chime-desktop/tree/main/docs/design" target="_blank">Aesthetic Bubblegum Pink</a> guidelines.</p>
+        <div style="margin-top: 15px;">
+            <a href="https://github.com/svijaykoushik/chrono-chime-desktop" target="_blank">GitHub</a> | 
+            <a href="https://github.com/svijaykoushik/chrono-chime-desktop/issues" target="_blank">Issues</a>
+        </div>
+    </footer>
+
+    <script>
+        // Simple OS detection to highlight the correct primary button
+        const userAgent = window.navigator.userAgent.toLowerCase();
+        const btnLinux = document.getElementById('btn-linux');
+        const btnWindows = document.getElementById('btn-windows');
+
+        if (userAgent.includes('win')) {
+            // Windows visitor: make Windows button primary, Linux secondary
+            btnWindows.className = 'btn btn-primary';
+            btnLinux.className = 'btn btn-secondary';
+            
+            // Swap order so primary is first visually
+            btnWindows.parentNode.insertBefore(btnWindows, btnLinux);
+        } else if (userAgent.includes('linux')) {
+            // Linux visitor: default is already correct (Linux primary, Windows secondary)
+        }
+    </script>
+</body>
+</html>
