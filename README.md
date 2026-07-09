@@ -1,64 +1,67 @@
-# ChronoChime
+<p align="center">
+  <img src="chrono-chime-icon-192.png" alt="ChronoChime Logo" width="128" height="128">
+</p>
 
-![ChronoChime Logo](https://github.com/svijaykoushik/chorno-chime/blob/main/chrono-chime-icon-192.png)
+<h1 align="center">ChronoChime Landing Page</h1>
 
-Welcome to ChronoChime, an elegant Progressive Web App (PWA) that sends you hourly notifications along with a soothing chime. Stay on track and manage your time effortlessly with ChronoChime!
+<p align="center">
+  The official, high-performance landing page for the <strong><a href="https://github.com/svijaykoushik/chrono-chime-desktop">ChronoChime Desktop</a></strong> application. Built for lightning-fast loading speeds (FCP & LCP optimized) and styled under the signature <em>Aesthetic Bubblegum Pink</em> brand guidelines.
+</p>
 
-## Overview
+---
 
-ChronoChime is a PWA built using HTML, CSS, and JavaScript. It utilizes service workers for background notifications and caching, offering a seamless user experience.
+## ⏰ About ChronoChime Desktop
 
-## Deployment
+ChronoChime is a calm, local-first temporal notification companion. It helps users stay aware of time passing by answering two simple questions: *When should the user be notified?* and *How should the user be notified?*
 
-To deploy ChronoChime, follow these steps:
+*   **Reliable Timing:** Precise scheduling, drift prevention, and recovery from sleep/system interruptions.
+*   **Custom Sounds:** Built-in chimes or support for custom device audio.
+*   **Composite Routines:** Multi-step temporal workflows (e.g., Pomodoro sessions, study/workout intervals) handled as first-class composite entities.
+*   **Quiet Hours:** Focus windows that automatically suppress notification sounds.
+*   **Local-First & Private:** Powered by a local SQLite database with zero cloud connections and zero telemetry tracking.
 
+---
+
+## ⚡ Landing Page Features
+
+This repository hosts the static landing page (`index.html`) engineered to showcase and distribute the desktop application:
+
+*   **Fast First Contentful Paint (FCP):** Critical CSS is inlined directly in the `<head>` of `index.html`. External assets and Google Fonts (`Poppins`, `Outfit`) are loaded progressively with `font-display: swap` to prevent render blocking and text flickering.
+*   **Fast Largest Contentful Paint (LCP):** The main hero image uses `fetchpriority="high"`. Images below the fold are lazy-loaded to optimize initial load times.
+*   **Zero Layout Shift (CLS):** Every visual element has pre-allocated layout space using precise sizes and aspect-ratios.
+*   **Smart OS Detection:** Simple client-side script detects if the visitor is on Linux or Windows, instantly highlighting the corresponding installer action button.
+
+---
+
+## 🚀 Deployment
+
+The landing page is hosted using **Firebase Hosting** and is configured to auto-deploy.
+
+### Automated CI/CD
+A GitHub Action workflow is configured in `.github/workflows/deploy-firebase.yml`. Every push or merge to the `main` branch automatically deploys the latest version of the landing page to Firebase Hosting.
+
+### Local Development
+To preview the landing page locally:
 1. Clone the repository:
-
    ```bash
    git clone https://github.com/svijaykoushik/chorno-chime.git
    ```
+2. Open `index.html` directly in your browser, or serve it using any lightweight server:
+   ```bash
+   npx serve .
+   ```
 
-2. Navigate to the project directory:
+---
 
-    ```bash
-    cd chorno-chime
-    ```
+## 📁 Repository Structure
 
-3. Choose one of the following deployment methods:
+*   `index.html` - The single-page landing website.
+*   `firebase.json` & `.firebaserc` - Firebase Hosting configurations.
+*   `chrono-chime-icon-*.png` - App logo icons.
+*   `screenshot*.jpeg` - Desktop screenshots showing the UI.
 
-   ## 3.1 Apache or IIS
-   
-   3.1.1 Set up your favorite web server (Apache, IIS, etc.).
-   
-   3.1.2 Copy the contents of the ChronoChime directory into your server's web root.
-   
-   3.1.3 Access ChronoChime by navigating to http://localhost or the appropriate server address.
+---
 
-   ## 3.2 Using the serve Package (Node.js)
-   
-   3.2.1 Navigate to the project directory:
-    ```bash
-    cd chorno-chime
-    ```
-   3.2.2 Run the serve command in the project directory:
-    ```bash
-    npx serve
-    ```
+## 📄 License
 
-## Screenshots
-
-![Screenshot 1](./screenshot1.jpeg)
-![Screenshot 2](./screenshot2.jpeg)
-
-## About
-
-ChronoChime was created as a fun and functional project to showcase the capabilities of PWAs.
-Stay productive and organized with the gentle reminder of ChronoChime's hourly notifications.
-
-## Contributing
-
-Contributions are welcome! If you find any issues or have ideas for improvements, feel free to submit a pull request.
-
-## Acknowledgments
-
-Sound Effect by [UNIVERSFIELD](https://pixabay.com/users/universfield-28281460) from [Pixabay](https://pixabay.com/sound-effects)
+This project is licensed under the MIT License.
