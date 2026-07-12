@@ -1,2 +1,8 @@
 node_modules
 .vscode
+# Block local Firebase cache files
+.firebase/
+
+# Block local debug log files generated on deployment errors
+firebase-debug.log
+*.firebase_debug.log

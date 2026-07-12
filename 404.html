@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>404 - Page Not Found | ChronoChime</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <style media="screen">
+        /* ChronoChime Theme Variables */
+        :root {
+            --rose: #EE5A8A;
+            --bubblegum: #F589B2;
+            --blush: #FFF0F6;
+            --rose-deep: #C73E6E;
+            --bubblegum-light: #FBB6D0;
+            --text-dark: #1E1E24;
+            --surface: #FFFFFF;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body { 
+            background: var(--blush); 
+            color: var(--text-dark); 
+            font-family: 'Poppins', sans-serif; 
+            margin: 0; 
+            padding: 0; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            text-align: center;
+        }
+
+        #message { 
+            background: var(--surface); 
+            max-width: 450px; 
+            margin: 20px; 
+            padding: 48px 32px; 
+            border-radius: 16px; 
+            box-shadow: 0 20px 40px rgba(238, 90, 138, 0.15); /* Soft pink shadow */
+        }
+
+        #message h2 { 
+            color: var(--rose-deep); 
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700; 
+            font-size: 5rem; 
+            margin: 0 0 8px; 
+            line-height: 1;
+        }
+
+        #message h1 { 
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.75rem; 
+            font-weight: 600; 
+            color: var(--text-dark); 
+            margin: 0 0 16px;
+        }
+
+        #message p { 
+            line-height: 1.6; 
+            margin: 0 0 32px; 
+            font-size: 1rem;
+            color: #4A4A52; 
+        }
+
+        #message a { 
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--rose-deep);
+            font-family: 'Poppins', sans-serif;
+            text-decoration: none; 
+            color: white; 
+            font-weight: 600;
+            padding: 0.75rem 1.5rem; 
+            border-radius: 16px; 
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 14px rgba(199, 62, 110, 0.4);
+        }
+
+        #message a:hover { 
+            background-color: #A62E58;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(199, 62, 110, 0.5);
+        }
+
+        @media (max-width: 600px) {
+            body { 
+                align-items: flex-start;
+                padding-top: 40px;
+                border-top: 8px solid var(--rose); 
+            }
+            #message { 
+                background: transparent; 
+                box-shadow: none; 
+                padding: 32px 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="message">
+        <h2>404</h2>
+        <h1>Lost in Time</h1>
+        <p>It looks like this temporal notification drifted out of sync. The page you are looking for doesn't exist or was moved.</p>
+        <a href="/">Return to Timeline</a>
+    </div>
+</body>
+</html>
