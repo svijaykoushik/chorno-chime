@@ -45,11 +45,19 @@ To preview the landing page locally:
 1. Clone the repository:
    ```bash
    git clone https://github.com/svijaykoushik/chorno-chime.git
+   cd chorno-chime
    ```
-2. Open `index.html` directly in your browser, or serve it using any lightweight server:
+2. Install dependencies:
    ```bash
-   npx serve .
+   npm install
    ```
+3. Start the preview server:
+   ```bash
+   npm run preview
+   ```
+   This will serve the site at `http://localhost:8000`.
+
+Alternatively, open `index.html` directly in your browser for a quick preview without a server.
 
 ---
 
